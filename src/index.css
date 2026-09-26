@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --color-ivory: #F5EFE6;
+  --color-cream: #EDE3D5;
+  --color-beige: #DCCBB8;
+  --color-oak: #8B5E3C;
+  --color-caramel: #B98252;
+  --color-brass: #B08A57;
+  --color-walnut: #3A2418;
+  --color-choc: #2A1912;
+  --color-espresso: #241611;
+  --color-ink: #241A15;
+  --color-warmwhite: #FFF9F0;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+.font-display { font-family: var(--font-display); }
+
+/* ---- subtle wood-grain texture (CSS only) ---- */
+.wood-grain {
+  background-color: var(--color-walnut);
+  background-image:
+    repeating-linear-gradient(93deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(88deg, rgba(0,0,0,0.10) 0 1px, transparent 1px 6px),
+    linear-gradient(120deg, #2A1912, #3A2418 55%, #2A1912);
+}
+.wood-grain-light {
+  background-color: var(--color-cream);
+  background-image:
+    repeating-linear-gradient(93deg, rgba(122,84,50,0.05) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, #F5EFE6, #EDE3D5);
+}
+.grain-overlay { position: relative; }
+.grain-overlay::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: repeating-linear-gradient(91deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 9px);
+}
+
+/* ---- buttons ---- */
+.btn-lux { position: relative; overflow: hidden; transition: transform .3s ease, background-color .3s ease, box-shadow .3s ease; }
+.btn-lux:hover { transform: translateY(-2px); }
+.btn-lux::after {
+  content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-20deg); transition: left .6s ease;
+}
+.btn-lux:hover::after { left: 130%; }
+.btn-primary { background: var(--color-choc); color: var(--color-warmwhite); box-shadow: 0 10px 24px -10px rgba(42,25,18,.6); }
+.btn-primary:hover { background: var(--color-oak); box-shadow: 0 16px 30px -10px rgba(139,94,60,.55); }
+
+/* ---- scroll reveal ---- */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-scale { opacity: 0; transform: scale(.96); transition: opacity .7s ease, transform .7s ease; }
+.reveal-scale.visible { opacity: 1; transform: none; }
+
+/* ---- page load entrance ---- */
+@keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes riseIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.page-enter { animation: pageFade .5s ease both; }
+.hero-rise > * { opacity: 0; animation: riseIn .8s ease forwards; }
+.hero-rise > *:nth-child(1) { animation-delay: .05s; }
+.hero-rise > *:nth-child(2) { animation-delay: .18s; }
+.hero-rise > *:nth-child(3) { animation-delay: .32s; }
+.hero-rise > *:nth-child(4) { animation-delay: .46s; }
+
+/* ---- slow cinematic hero movement ---- */
+@keyframes kenburns { from { transform: scale(1.08); } to { transform: scale(1); } }
+.kenburns { animation: kenburns 6s ease-out both; }
+@keyframes floatGlow {
+  0%, 100% { opacity: .35; transform: translateY(0); }
+  50% { opacity: .6; transform: translateY(-14px); }
+}
+.float-glow { animation: floatGlow 7s ease-in-out infinite; }
+
+/* ---- nav links ----
+   No ::before / ::after underline: nav items use a colour-only hover and a
+   minimal colour-only active state, so no decorative line is ever drawn. */
+.nav-link { position: relative; }
+
+/* ---- product card ---- */
+.lux-card { transition: transform .4s ease, box-shadow .4s ease; }
+.lux-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -18px rgba(42,25,18,.35); }
+.lux-card img.lux-img { transition: transform .5s ease, filter .5s ease; }
+.lux-card:hover img.lux-img { transform: scale(1.03); filter: brightness(1.04); }
+.glass-btn { background: rgba(255,249,240,.85); backdrop-filter: blur(8px); }
+
+/* ---- cart bump ---- */
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.bump { animation: bump .4s ease; }
+
+/* ---- mobile drawer ---- */
+@keyframes drawerIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.drawer-in { animation: drawerIn .25s ease both; }
+
+/* ---- modal / overlay ---- */
+@keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+.modal-in { animation: modalIn .3s ease both; }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+.overlay-in { animation: overlayIn .25s ease both; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* rotation hint */
+@keyframes dragHint { 0%,100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+
+/* front view subtle breathing — stays front, no angle change */
+@keyframes frontBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.012); } }
+.front-breathe { animation: frontBreathe 4.5s ease-in-out infinite; transform-origin: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal, .reveal-scale { opacity: 1; transform: none; }
+}
