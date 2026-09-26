@@ -50,3 +50,5 @@ backend/uploads/*
 # build / packaging artifacts
 *.tsbuildinfo
 public/HomeCraft-complete.zip
+
+.vercel

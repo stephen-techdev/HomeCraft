@@ -71,6 +71,11 @@ Frontend on **Vercel**, backend on **Render** — both deploy from this reposito
 Vercel  ──(HTTPS, VITE_API_URL)──▶  Render  ──▶  /data/homecraft.db  +  /data/uploads
 ```
 
+| | |
+|---|---|
+| Frontend (production) | <https://homecraft-stephen08.vercel.app> |
+| Backend | `https://homecraft-api.onrender.com` (after the Render Blueprint is created) |
+
 ## 1. Backend → Render
 
 `render.yaml` is a ready Blueprint.
@@ -115,7 +120,21 @@ What the Blueprint sets for you:
 2. Deploy Vercel with `VITE_API_URL` set to that URL.
 3. Put the Vercel domain into Render's `HC_CORS` and save (Render restarts the service).
 
-## API base resolution
+## Gotcha: Vercel CLI + `render.yaml`
+
+Vercel CLI 60 reads a root-level `render.yaml` as a *services* definition. It then switches the
+project to `framework: services` and tries to run `pip install -r backend/requirements.txt`
+inside the Node build image, which fails with `externally-managed-environment`.
+
+The Vercel project is already configured as a plain **Vite** project, so Git-based deploys from
+the dashboard are fine. If you use the CLI again:
+
+- deploy from the dashboard (connect the repo), **or**
+- deploy from a frontend-only copy of the tree (no `backend/`, no `render.yaml`), or
+- keep the project's framework on `vite` and make sure `vercel.json` has no `services` block —
+  the CLI silently rewrites `vercel.json` when it plans a service
+
+`.vercelignore` keeps `backend/`, `render.yaml` and `.env` out of the uploaded files.
 
 `src/lib/api.ts` picks the backend target automatically:
 

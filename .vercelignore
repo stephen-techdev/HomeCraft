@@ -1,0 +1,12 @@
+# Files that must not be part of the Vercel (frontend) deployment.
+#
+# render.yaml   — the Render Blueprint for the backend. Vercel's CLI reads it as
+#                 a service definition and tries to build the Python service in
+#                 the Node image, which fails. Render reads it from the repo.
+# backend/      — the FastAPI app, deployed to Render, not Vercel
+# .env          — local dev config, never uploaded
+backend/
+render.yaml
+.env
+.env.local
+.env.*.local
