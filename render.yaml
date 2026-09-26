@@ -1,0 +1,48 @@
+# Render Blueprint — HomeCraft API (FastAPI + SQLite)
+#
+# Deploy with:  https://render.com/deploy?repo=https://github.com/stephen-techdev/HomeCraft
+# (or "New > Blueprint" in the Render dashboard and point it at this repo/branch)
+#
+# NOTE ON PERSISTENCE: Render's free web services run on an ephemeral
+# filesystem, so the SQLite file and uploaded images are deleted on every
+# redeploy. The disk below keeps them — a disk requires a paid instance
+# type (Starter), which you select when creating the service.
+services:
+  - type: web
+    name: homecraft-api
+    runtime: python
+    plan: starter            # paid tier — required for `disk:`
+    region: singapore        # closest to the Vercel audience; change if needed
+    branch: main
+    autoDeploy: true
+
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --app-dir backend
+
+    healthCheckPath: /api/health
+
+    # Persistent volume: /data holds both the SQLite DB and uploaded images
+    disk:
+      name: homecraft-data
+      mountPath: /data
+      sizeGB: 1
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      # JWT signing key — generated once and kept in the service env.
+      # Every session cookie stays valid across restarts and deploys.
+      - key: HC_SECRET
+        generateValue: true
+      # SQLite file and uploads live on the persistent disk
+      - key: HC_DB
+        value: /data/homecraft.db
+      - key: HC_UPLOADS
+        value: /data/uploads
+      # Comma-separated allowed origins. MUST include your Vercel URL, e.g.
+      #   https://homecraft-xyz.vercel.app
+      # Keep the localhost entries for local development.
+      - key: HC_CORS
+        sync: false

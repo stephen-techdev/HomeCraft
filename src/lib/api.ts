@@ -1,12 +1,22 @@
-// Central API configuration. Frontend currently uses local mock data.
-// Point VITE_API_URL at a FastAPI backend later; endpoints mirror the planned contract.
-const configuredBase = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-// On localhost the backend is called directly (VITE_API_URL). Any other origin
-// (Cloudflare tunnel, production) must call same-origin so requests route through
-// the Vite proxy — an external browser has no localhost:8000 of its own.
+// Central API configuration.
+//
+// Three setups are supported:
+//   1. local dev      VITE_API_URL=http://localhost:8000, page on localhost  -> direct call
+//   2. preview tunnel VITE_API_URL unset, page on a tunnel host               -> same-origin /api
+//                     (Vite proxies /api and /uploads to the local backend)
+//   3. split hosting  VITE_API_URL=https://<api-host>, page anywhere         -> direct call
+//                     (Vercel frontend -> Render backend)
+const configured = (import.meta.env.VITE_API_URL ?? '').trim().replace(/\/+$/, '');
 const onLocalOrigin =
   typeof window !== 'undefined' && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
-export const API_BASE = onLocalOrigin ? configuredBase : '';
+const targetsLoopback = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(configured);
+
+// A loopback API is only reachable from this machine — never point a public
+// browser (tunnel / Vercel) at it, fall back to same-origin instead.
+export const API_BASE = !configured
+  ? (onLocalOrigin ? 'http://localhost:8000' : '')
+  : (targetsLoopback && !onLocalOrigin ? '' : configured);
+
 
 export const endpoints = {
   products: '/api/products',

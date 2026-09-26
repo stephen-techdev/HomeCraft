@@ -25,9 +25,13 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, field_validator
 
 BASE = Path(__file__).parent
-DB_PATH = Path(os.getenv('HC_DB', str(BASE / 'homecraft.db')))
-UPLOADS = BASE / 'uploads'
-UPLOADS.mkdir(exist_ok=True)
+# HC_DB / HC_UPLOADS let a hosted deployment point at a persistent disk —
+# the container filesystem is ephemeral, so the database and uploaded
+# images would otherwise be wiped on every deploy. Defaults keep local dev
+# exactly as it was (both inside backend/).
+DB_PATH = Path(os.getenv('HC_DB') or (BASE / 'homecraft.db'))
+UPLOADS = Path(os.getenv('HC_UPLOADS') or (BASE / 'uploads'))
+UPLOADS.mkdir(parents=True, exist_ok=True)
 
 SECRET_FILE = BASE / '.secret'
 
