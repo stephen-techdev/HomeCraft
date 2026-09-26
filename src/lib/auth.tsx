@@ -28,7 +28,17 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
     e.code = 'offline';
     throw e;
   }
-  const data = await res.json().catch(() => ({}));
+  // A host that rewrites unknown paths to index.html (SPA fallback — e.g. the
+  // Vercel frontend before VITE_API_URL points at the API) answers 200 with
+  // HTML. That is not a payload: parsing it would yield a bogus user object and
+  // blank the page, so report it as "offline" and let the caller handle it.
+  const isJson = (res.headers.get('content-type') ?? '').includes('application/json');
+  const data = isJson ? await res.json().catch(() => ({})) : {};
+  if (res.ok && !isJson) {
+    const e = new Error('The HomeCraft API is not available at this address.') as ApiError;
+    e.code = 'offline';
+    throw e;
+  }
   if (!res.ok) {
     const detail = (data as { detail?: string | { msg?: string }[] }).detail;
     // FastAPI validation errors come as an array; surface a readable string.
@@ -283,7 +293,7 @@ export function AuthPrompt() {
   );
 }
 
-export const firstName = (u: AuthUser) => u.full_name.split(' ')[0];
+export const firstName = (u: AuthUser) => (u?.full_name ?? '').split(' ')[0];
 
 /** Raw API helper for admin dashboard calls (throws ApiError with status/code). */
 export async function adminApi<T>(path: string, init?: RequestInit): Promise<T> {

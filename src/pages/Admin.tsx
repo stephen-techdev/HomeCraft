@@ -178,7 +178,7 @@ function UsersTab() {
                 <td className={td}>
                   {u.profile_image
                     ? <img src={u.profile_image.startsWith('/uploads/') ? `${API_BASE}${u.profile_image}` : u.profile_image} alt="" className="h-9 w-9 rounded-full object-cover" />
-                    : <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2A1912] text-xs font-bold text-[#D8B98A]">{u.full_name[0]}</span>}
+                    : <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2A1912] text-xs font-bold text-[#D8B98A]">{u.full_name?.[0] ?? '?'}</span>}
                 </td>
                 <td className={td}><b>{u.full_name}</b>{u.role === 'admin' && <span className="ml-1 rounded bg-[#2A1912] px-1.5 py-0.5 text-[10px] font-bold text-white">ADMIN</span>}</td>
                 <td className={td}>{u.email}</td>
@@ -214,7 +214,7 @@ function UsersTab() {
             <div className="flex items-center gap-4">
               {detail.profile_image
                 ? <img src={detail.profile_image.startsWith('/uploads/') ? `${API_BASE}${detail.profile_image}` : detail.profile_image} alt="" className="h-16 w-16 rounded-full object-cover" />
-                : <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#2A1912] font-display text-2xl text-[#D8B98A]">{detail.full_name[0]}</span>}
+                : <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#2A1912] font-display text-2xl text-[#D8B98A]">{detail.full_name?.[0] ?? '?'}</span>}
               <div><h2 className="font-display text-xl">{detail.full_name}</h2><StatusPill status={detail.status} /></div>
               <button onClick={() => setDetail(null)} className="ml-auto rounded-lg border px-3 py-1.5 text-sm">Close</button>
             </div>

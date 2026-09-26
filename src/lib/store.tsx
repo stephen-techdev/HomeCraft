@@ -63,6 +63,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         apiFetch<Product[]>('/api/products'),
         apiFetch<{ ids: string[] }>('/api/products/removed').catch(() => ({ ids: [] as string[] })),
       ]);
+      if (!Array.isArray(rows)) throw new Error('Unexpected catalogue response');
       const skip = new Set<string>([...rows.map(r => r.id), ...removed.ids]);
       const local = PRODUCTS.filter(p => !skip.has(p.id));
       PRODUCTS.length = 0;

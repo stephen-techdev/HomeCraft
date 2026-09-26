@@ -161,7 +161,7 @@ function Profile() {
         <div className="relative">
           {preview || user!.profile_image
             ? <img src={preview ?? user!.profile_image!} alt="Profile" className="h-24 w-24 rounded-full border-2 border-[#B08A57] object-cover" />
-            : <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#2A1912] font-display text-3xl text-[#D8B98A]">{user!.full_name[0]}</span>}
+            : <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#2A1912] font-display text-3xl text-[#D8B98A]">{user!.full_name?.[0] ?? '?'}</span>}
           <button onClick={() => fileRef.current?.click()} aria-label="Upload profile image"
             className="absolute -bottom-1 -right-1 rounded-full bg-[#B08A57] p-2 text-white shadow hover:bg-[#2A1912]"><Camera size={15} /></button>
           <input ref={fileRef} type="file" accept="image/*" className="hidden"

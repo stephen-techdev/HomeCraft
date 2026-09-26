@@ -34,5 +34,9 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
     ...init,
   });
   if (!res.ok) throw new Error(`API ${res.status}`);
+  // Guard against an SPA fallback answering 200 with HTML: never hand that back
+  // as data, otherwise it silently corrupts whatever consumes it.
+  const type = res.headers.get('content-type') ?? '';
+  if (!type.includes('application/json')) throw new Error('Unexpected non-JSON response from the API.');
   return res.json() as Promise<T>;
 }

@@ -89,7 +89,7 @@ export default function Navbar() {
               <button onClick={() => setMenu(m => !m)} className="ml-1 flex items-center gap-2 rounded-full border border-[#DCCBB8] bg-white py-1 pl-1 pr-2.5 transition-all hover:border-[#8B5E3C]" aria-label="Account menu" aria-expanded={menu}>
                 {user.profile_image
                   ? <img src={user.profile_image} alt="" className="h-7 w-7 rounded-full object-cover" />
-                  : <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2A1912] text-xs font-bold text-[#D8B98A]">{user.full_name[0]}</span>}
+                  : <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2A1912] text-xs font-bold text-[#D8B98A]">{user.full_name?.[0] ?? '?'}</span>}
                 <span className="hidden max-w-20 truncate text-sm font-semibold sm:block">{firstName(user)}</span>
               </button>
               {menu && (
