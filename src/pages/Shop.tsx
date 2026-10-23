@@ -10,8 +10,8 @@ import { CATEGORIES, COLLECTIONS, PRODUCTS, getCollection, matchesSub, productCo
 type Sort = 'featured' | 'new' | 'low' | 'high' | 'rating';
 const PAGE = 8;
 
-/** Resolve ?category= / ?collection= / legacy ?cat= to a collection slug. */
-function slugFromParams(params: URLSearchParams): string | null {
+/** Resolve ?collection= / legacy ?category= / ?cat= to a collection slug. */
+function collFromParams(params: URLSearchParams): string | null {
   const direct = params.get('collection') ?? params.get('category') ?? params.get('cat');
   if (!direct) return null;
   if (getCollection(direct)) return direct;
@@ -23,7 +23,7 @@ export default function Shop() {
   const [params] = useSearchParams();
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('All');
-  const [collSlug, setCollSlug] = useState<string | null>(() => slugFromParams(params));
+  const [collSlug, setCollSlug] = useState<string | null>(() => collFromParams(params));
   const [sub, setSub] = useState<string | null>(null);
   const [maxPrice, setMaxPrice] = useState(110000);
   const [minRating, setMinRating] = useState(0);
@@ -32,7 +32,7 @@ export default function Shop() {
   const [shown, setShown] = useState(PAGE);
 
   useEffect(() => {
-    setCollSlug(slugFromParams(params));
+    setCollSlug(collFromParams(params));
     setSub(null); setShown(PAGE);
   }, [params]);
 

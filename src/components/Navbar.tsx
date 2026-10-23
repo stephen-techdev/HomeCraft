@@ -4,14 +4,11 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { firstName, useAuth } from '../lib/auth';
 import { useShop } from '../lib/store';
 
-type NavItem = { to: string; label: string; hash?: boolean };
+type NavItem = { to: string; label: string };
 
-/** `hash: true` items are in-page anchors (Categories / Collections) — they never
- *  get an active-route indicator, so no line is ever drawn under them. */
 const LINKS: NavItem[] = [
   { to: '/', label: 'Home' }, { to: '/shop', label: 'Shop' },
-  { to: '/#categories', label: 'Categories', hash: true },
-  { to: '/#collections', label: 'Collections', hash: true },
+  { to: '/collections', label: 'Collections' },
   { to: '/about', label: 'About' }, { to: '/contact', label: 'Contact' },
 ];
 
@@ -57,12 +54,7 @@ export default function Navbar() {
           Home<span className="text-[#8B5E3C]">Craft</span>
         </Link>
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
-          {LINKS.map(l => l.hash ? (
-            <Link key={l.label} to={l.to}
-              className={`nav-link text-sm font-medium transition-colors duration-300 ${navIdle}`}>
-              {l.label}
-            </Link>
-          ) : (
+          {LINKS.map(l => (
             <NavLink key={l.label} to={l.to}
               className={({ isActive }) => `nav-link text-sm font-medium transition-colors duration-300 ${isActive ? navActive : navIdle}`}>
               {l.label}
@@ -120,13 +112,10 @@ export default function Navbar() {
       {open && (
         <nav className="drawer-in border-t border-[#8B5E3C]/15 bg-[#F5EFE6] px-4 py-3 lg:hidden" aria-label="Mobile">
           {([...LINKS, { to: user ? '/account' : '/login', label: user ? `Hi, ${firstName(user)}` : 'Login / Create Account' }] as NavItem[]).map(l => (
-            l.hash ? (
-              <Link key={l.label} to={l.to} onClick={() => setOpen(false)}
-                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-[#241A15]/80 transition-colors hover:bg-[#EDE3D5] hover:text-[#8B5E3C]">{l.label}</Link>
-            ) : (
-              <NavLink key={l.label} to={l.to} onClick={() => setOpen(false)}
-                className={({ isActive }) => `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-[#EDE3D5] hover:text-[#8B5E3C] ${isActive ? navActive : 'text-[#241A15]/80'}`}>{l.label}</NavLink>
-            )
+            <NavLink key={l.label} to={l.to} onClick={() => setOpen(false)}
+              className={({ isActive }) => `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-[#EDE3D5] hover:text-[#8B5E3C] ${isActive ? navActive : 'text-[#241A15]/80'}`}>
+              {l.label}
+            </NavLink>
           ))}
         </nav>
       )}

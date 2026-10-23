@@ -40,7 +40,7 @@ function Hero() {
           <p className="mt-4 max-w-md text-[#FFF9F0]/80">Discover thoughtfully designed furniture that brings comfort, character, and timeless style into your home.</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/shop" className="btn-lux btn-primary rounded-lg px-8 py-4 text-sm font-bold">Shop Collection</Link>
-            <Link to="/#categories" className="btn-lux rounded-lg border border-[#FFF9F0]/50 px-8 py-4 text-sm font-bold text-[#FFF9F0] backdrop-blur-sm hover:border-[#B08A57] hover:text-[#D8B98A]">Explore Categories</Link>
+            <Link to="/collections" className="btn-lux rounded-lg border border-[#FFF9F0]/50 px-8 py-4 text-sm font-bold text-[#FFF9F0] backdrop-blur-sm hover:border-[#B08A57] hover:text-[#D8B98A]">Explore Collections</Link>
           </div>
         </div>
       </div>

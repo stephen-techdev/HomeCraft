@@ -1,6 +1,7 @@
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter, Routes } from 'react-router-dom';
 import QuickView from './components/QuickView';
 import SearchOverlay from './components/SearchOverlay';
+import BackToTop from './components/BackToTop';
 import { AuthPrompt, AuthProvider, AdminRoute, ProtectedRoute } from './lib/auth';
 import { ShopProvider } from './lib/store';
 import { Account, WishlistPage } from './pages/Account';
@@ -10,6 +11,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Home from './pages/Home';
 import { About, Contact } from './pages/Info';
+import CollectionsPage from './pages/Browse';
 import ProductDetails from './pages/ProductDetails';
 import Shop from './pages/Shop';
 
@@ -29,7 +31,9 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/categories" element={<Navigate to="/collections" replace />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/collections" element={<CollectionsPage />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
@@ -46,6 +50,7 @@ export default function App() {
           <QuickView />
           <SearchOverlay />
           <AuthPrompt />
+          <BackToTop />
         </BrowserRouter>
       </AuthProvider>
     </ShopProvider>

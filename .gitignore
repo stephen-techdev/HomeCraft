@@ -52,3 +52,4 @@ backend/uploads/*
 public/HomeCraft-complete.zip
 
 .vercel
+.env*

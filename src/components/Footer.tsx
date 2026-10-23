@@ -1,6 +1,7 @@
 import { AtSign, Globe, Mail, MapPin, MessageCircle, Phone, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CONTACT } from '../lib/contact';
+import { CATEGORY_SLUGS } from '../lib/data';
 
 type Social = { icon: LucideIcon; label: string; href?: string; to?: string; blank?: boolean };
 
@@ -41,9 +42,10 @@ export default function Footer() {
         <nav aria-label="Shop">
           <p className={col}>Shop</p>
           <ul className="mt-4 space-y-2.5 text-sm">
-            {['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor'].map(c => (
-              <li key={c}><Link to={`/shop?cat=${encodeURIComponent(c)}`} className={link}>{c}</Link></li>
+            {(['Living Room', 'Bedroom', 'Dining', 'Office', 'Outdoor'] as const).map(c => (
+              <li key={c}><Link to={`/shop?collection=${CATEGORY_SLUGS[c]}`} className={link}>{c}</Link></li>
             ))}
+            <li><Link to="/collections" className={link}>All Collections</Link></li>
           </ul>
         </nav>
         <nav aria-label="Company">
